@@ -87,6 +87,43 @@ Add the following to your Cursor MCP configuration (`~/.cursor/mcp.json`):
 </details>
 
 <details>
+<summary>Raycast</summary>
+
+1. Open Raycast Settings
+2. Go to **Extensions** > **AI Commands** > **MCP Servers**
+3. Click **Add Server** and configure:
+
+| Field | Value |
+|-------|-------|
+| Name | `reearth-cms` |
+| Command | `reearth-cms-mcp` |
+
+4. Add environment variables:
+
+| Variable | Value |
+|----------|-------|
+| `REEARTH_CMS_TOKEN` | `your-api-token` |
+| `REEARTH_CMS_WORKSPACE_ID` | `your-workspace-id` |
+
+Alternatively, you can add the server via Raycast's config file (`~/.config/raycast/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "reearth-cms": {
+      "command": "reearth-cms-mcp",
+      "env": {
+        "REEARTH_CMS_TOKEN": "your-api-token",
+        "REEARTH_CMS_WORKSPACE_ID": "your-workspace-id"
+      }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
 <summary>VS Code</summary>
 
 Add the following to your VS Code `settings.json`:
