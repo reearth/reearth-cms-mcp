@@ -230,11 +230,22 @@ Add the following to your Cursor MCP configuration (`~/.cursor/mcp.json`):
 <tr valign=top>
 <td>
 
+1. Open Raycast Settings  
+2. Go to **Extensions** > **AI Commands** > **MCP Servers**  
+3. Click **Add Server** and configure:
+
 | Field | Value |
 |-------|-------|
 | Name | `reearth-cms` |
 | Command | `docker` |
 | Arguments | `run -i --rm -e REEARTH_CMS_TOKEN -e REEARTH_CMS_WORKSPACE_ID reearth/reearth-cms-mcp` |
+
+4. Add environment variables:
+
+| Variable | Value |
+|----------|-------|
+| `REEARTH_CMS_TOKEN` | `your-api-token` |
+| `REEARTH_CMS_WORKSPACE_ID` | `your-workspace-id` |
 
 Or via config file (`~/.config/raycast/mcp.json`):
 
