@@ -78,14 +78,6 @@ claude mcp add reearth-cms -e REEARTH_CMS_TOKEN=your-api-token -e REEARTH_CMS_WO
 claude mcp add reearth-cms -e REEARTH_CMS_TOKEN=your-api-token -e REEARTH_CMS_WORKSPACE_ID=your-workspace-id -- reearth-cms-mcp
 ```
 
-Or set the environment variables in your shell and run:
-
-```bash
-export REEARTH_CMS_TOKEN="your-api-token"
-export REEARTH_CMS_WORKSPACE_ID="your-workspace-id"
-claude mcp add reearth-cms -- reearth-cms-mcp
-```
-
 </td>
 </tr>
 </table>
