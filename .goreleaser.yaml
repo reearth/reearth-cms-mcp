@@ -4,6 +4,7 @@ builds:
   - main: ./cmd/reearth-cms-mcp
     env:
       - CGO_ENABLED=0
+    binary: reearth-cms-mcp
     goos:
       - linux
       - windows
@@ -24,6 +25,50 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+
+dockers:
+  - image_templates:
+      - reearth/reearth-cms-mcp:{{ .Version }}-amd64
+      - reearth/reearth-cms-mcp:latest-amd64
+    dockerfile: Dockerfile
+    use: buildx
+    goos: linux
+    goarch: amd64
+    build_flag_templates:
+      - --platform=linux/amd64
+      - --label=org.opencontainers.image.title={{ .ProjectName }}
+      - --label=org.opencontainers.image.description=MCP server for Re:Earth CMS
+      - --label=org.opencontainers.image.url=https://github.com/reearth/reearth-cms-mcp
+      - --label=org.opencontainers.image.source=https://github.com/reearth/reearth-cms-mcp
+      - --label=org.opencontainers.image.version={{ .Version }}
+      - --label=org.opencontainers.image.created={{ .Date }}
+      - --label=org.opencontainers.image.revision={{ .FullCommit }}
+  - image_templates:
+      - reearth/reearth-cms-mcp:{{ .Version }}-arm64v8
+      - reearth/reearth-cms-mcp:latest-arm64v8
+    dockerfile: Dockerfile
+    use: buildx
+    goos: linux
+    goarch: arm64
+    build_flag_templates:
+      - --platform=linux/arm64/v8
+      - --label=org.opencontainers.image.title={{ .ProjectName }}
+      - --label=org.opencontainers.image.description=MCP server for Re:Earth CMS
+      - --label=org.opencontainers.image.url=https://github.com/reearth/reearth-cms-mcp
+      - --label=org.opencontainers.image.source=https://github.com/reearth/reearth-cms-mcp
+      - --label=org.opencontainers.image.version={{ .Version }}
+      - --label=org.opencontainers.image.created={{ .Date }}
+      - --label=org.opencontainers.image.revision={{ .FullCommit }}
+
+docker_manifests:
+  - name_template: reearth/reearth-cms-mcp:{{ .Version }}
+    image_templates:
+      - reearth/reearth-cms-mcp:{{ .Version }}-amd64
+      - reearth/reearth-cms-mcp:{{ .Version }}-arm64v8
+  - name_template: reearth/reearth-cms-mcp:latest
+    image_templates:
+      - reearth/reearth-cms-mcp:latest-amd64
+      - reearth/reearth-cms-mcp:latest-arm64v8
 
 checksum:
   name_template: "checksums.txt"
