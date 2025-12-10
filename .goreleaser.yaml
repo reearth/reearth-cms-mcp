@@ -78,6 +78,6 @@ changelog:
 
 release:
   github:
-    owner: KeisukeYamashita
+    owner: reearth
     name: reearth-cms-mcp
   make_latest: true
