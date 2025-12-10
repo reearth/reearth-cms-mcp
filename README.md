@@ -4,7 +4,7 @@
 
 ## Usecases
 
-Here are some other useful prompts to get started:
+Here are some useful prompts to get started:
 
 | Usecase | Prompt |
 |---------|--------|
