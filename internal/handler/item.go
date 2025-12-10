@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/KeisukeYamashita/reearth-cms-mcp/internal/cms"
-	"github.com/KeisukeYamashita/reearth-cms-mcp/internal/tool"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/reearth/reearth-cms-mcp/internal/cms"
+	"github.com/reearth/reearth-cms-mcp/internal/logging"
+	"github.com/reearth/reearth-cms-mcp/internal/tool"
 	"github.com/reearth/reearth-cms/server/pkg/id"
 	"github.com/reearth/reearthx/asset/domain/model"
 	"github.com/reearth/reearthx/asset/domain/project"
@@ -21,12 +22,12 @@ func (h *Handler) GetItem(ctx context.Context, req *mcp.CallToolRequest, args Ge
 		return tool.ErrorResult(fmt.Sprintf("Invalid item ID: %v", err)), nil, nil
 	}
 
-	assetParam := cms.AssetEmbedding(cms.All)
-	params := &cms.ItemGetParams{
-		Asset: (*cms.AssetParam)(&assetParam),
-	}
+	// assetParam := cms.AssetEmbedding(cms.All)
+	// params := &cms.ItemGetParams{
+	// 	Asset: (*cms.AssetParam)(&assetParam),
+	// }
 
-	resp, err := h.client.ItemGetWithResponse(ctx, h.workspaceID, projectID, modelIDOrKey, itemID, params)
+	resp, err := h.client.ItemGetWithResponse(ctx, h.workspaceID, projectID, modelIDOrKey, itemID, nil)
 	if err != nil {
 		return tool.ErrorResult(fmt.Sprintf("Failed to get item: %v", err)), nil, nil
 	}
@@ -38,6 +39,15 @@ func (h *Handler) GetItem(ctx context.Context, req *mcp.CallToolRequest, args Ge
 }
 
 func (h *Handler) ListItems(ctx context.Context, req *mcp.CallToolRequest, args ListItemsArgs) (*mcp.CallToolResult, any, error) {
+	logger := logging.Logger(req.Session)
+	logger.Info("listing items",
+		"project_id", args.ProjectID,
+		"model_id", args.ModelID,
+		"page", args.Page,
+		"per_page", args.PerPage,
+		"keyword", args.Keyword,
+	)
+
 	projectID := project.IDOrAlias(args.ProjectID)
 	modelIDOrKey := model.IDOrKey(args.ModelID)
 
@@ -59,14 +69,26 @@ func (h *Handler) ListItems(ctx context.Context, req *mcp.CallToolRequest, args 
 		params.Keyword = &keyword
 	}
 
-	resp, err := h.client.ItemFilterWithResponse(ctx, h.workspaceID, projectID, modelIDOrKey, params, cms.ItemFilterJSONRequestBody{})
+	logger.Debug("sending request to CMS API",
+		"workspace_id", string(h.workspaceID),
+		"project_id", string(projectID),
+		"model_id", string(modelIDOrKey),
+	)
+
+	resp, err := h.client.ItemFilterWithResponse(ctx, h.workspaceID, projectID, modelIDOrKey, params)
 	if err != nil {
+		logger.Error("failed to list items", "error", err)
 		return tool.ErrorResult(fmt.Sprintf("Failed to list items: %v", err)), nil, nil
 	}
 	if resp.JSON200 == nil {
+		logger.Error("failed to list items",
+			"status_code", resp.StatusCode(),
+			"body", string(resp.Body),
+		)
 		return tool.ErrorResult(fmt.Sprintf("Failed to list items: status %d", resp.StatusCode())), nil, nil
 	}
 
+	logger.Info("items listed successfully", "total_count", resp.JSON200.TotalCount)
 	return tool.JSONResult(resp.JSON200), nil, nil
 }
 

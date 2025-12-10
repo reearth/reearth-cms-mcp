@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/KeisukeYamashita/reearth-cms-mcp/internal/cms"
-	"github.com/KeisukeYamashita/reearth-cms-mcp/internal/tool"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/reearth/reearth-cms-mcp/internal/cms"
+	"github.com/reearth/reearth-cms-mcp/internal/tool"
 	"github.com/reearth/reearth-cms/server/pkg/id"
 	"github.com/reearth/reearthx/asset/domain/project"
 )

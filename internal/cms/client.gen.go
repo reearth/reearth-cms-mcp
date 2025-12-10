@@ -818,11 +818,6 @@ type ModelImportMultipartBodyFormat string
 // ModelImportMultipartBodyStrategy defines parameters for ModelImport.
 type ModelImportMultipartBodyStrategy string
 
-// ItemFilterJSONBody defines parameters for ItemFilter.
-type ItemFilterJSONBody struct {
-	Filter *Condition `json:"filter,omitempty"`
-}
-
 // ItemFilterParams defines parameters for ItemFilter.
 type ItemFilterParams struct {
 	// Sort Used to define the order of the response list
@@ -987,9 +982,6 @@ type ModelImportJSONRequestBody ModelImportJSONBody
 
 // ModelImportMultipartRequestBody defines body for ModelImport for multipart/form-data ContentType.
 type ModelImportMultipartRequestBody ModelImportMultipartBody
-
-// ItemFilterJSONRequestBody defines body for ItemFilter for application/json ContentType.
-type ItemFilterJSONRequestBody ItemFilterJSONBody
 
 // ItemCreateJSONRequestBody defines body for ItemCreate for application/json ContentType.
 type ItemCreateJSONRequestBody ItemCreateJSONBody
@@ -1198,10 +1190,8 @@ type ClientInterface interface {
 
 	ModelImport(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body ModelImportJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ItemFilterWithBody request with any body
-	ItemFilterWithBody(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	ItemFilter(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, body ItemFilterJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// ItemFilter request
+	ItemFilter(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ItemCreateWithBody request with any body
 	ItemCreateWithBody(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1780,20 +1770,8 @@ func (c *Client) ModelImport(ctx context.Context, workspaceIdOrAlias WorkspaceId
 	return c.Client.Do(req)
 }
 
-func (c *Client) ItemFilterWithBody(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewItemFilterRequestWithBody(c.Server, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) ItemFilter(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, body ItemFilterJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewItemFilterRequest(c.Server, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, body)
+func (c *Client) ItemFilter(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewItemFilterRequest(c.Server, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params)
 	if err != nil {
 		return nil, err
 	}
@@ -4170,19 +4148,8 @@ func NewModelImportRequestWithBody(server string, workspaceIdOrAlias WorkspaceId
 	return req, nil
 }
 
-// NewItemFilterRequest calls the generic ItemFilter builder with application/json body
-func NewItemFilterRequest(server string, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, body ItemFilterJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewItemFilterRequestWithBody(server, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, "application/json", bodyReader)
-}
-
-// NewItemFilterRequestWithBody generates requests for ItemFilter with any type of body
-func NewItemFilterRequestWithBody(server string, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, contentType string, body io.Reader) (*http.Request, error) {
+// NewItemFilterRequest generates requests for ItemFilter
+func NewItemFilterRequest(server string, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -4339,12 +4306,10 @@ func NewItemFilterRequestWithBody(server string, workspaceIdOrAlias WorkspaceIdO
 		queryURL.RawQuery = queryValues.Encode()
 	}
 
-	req, err := http.NewRequest("GET", queryURL.String(), body)
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
 	if err != nil {
 		return nil, err
 	}
-
-	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -5606,10 +5571,8 @@ type ClientWithResponsesInterface interface {
 
 	ModelImportWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body ModelImportJSONRequestBody, reqEditors ...RequestEditorFn) (*ModelImportResponse, error)
 
-	// ItemFilterWithBodyWithResponse request with any body
-	ItemFilterWithBodyWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error)
-
-	ItemFilterWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, body ItemFilterJSONRequestBody, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error)
+	// ItemFilterWithResponse request
+	ItemFilterWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error)
 
 	// ItemCreateWithBodyWithResponse request with any body
 	ItemCreateWithBodyWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ItemCreateResponse, error)
@@ -7138,17 +7101,9 @@ func (c *ClientWithResponses) ModelImportWithResponse(ctx context.Context, works
 	return ParseModelImportResponse(rsp)
 }
 
-// ItemFilterWithBodyWithResponse request with arbitrary body returning *ItemFilterResponse
-func (c *ClientWithResponses) ItemFilterWithBodyWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error) {
-	rsp, err := c.ItemFilterWithBody(ctx, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, contentType, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseItemFilterResponse(rsp)
-}
-
-func (c *ClientWithResponses) ItemFilterWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, body ItemFilterJSONRequestBody, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error) {
-	rsp, err := c.ItemFilter(ctx, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, body, reqEditors...)
+// ItemFilterWithResponse request returning *ItemFilterResponse
+func (c *ClientWithResponses) ItemFilterWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error) {
+	rsp, err := c.ItemFilter(ctx, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, reqEditors...)
 	if err != nil {
 		return nil, err
 	}

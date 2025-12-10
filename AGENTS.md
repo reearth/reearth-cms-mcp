@@ -27,7 +27,7 @@ go build .
 ### Build with Version
 
 ```bash
-go build -ldflags "-X github.com/KeisukeYamashita/reearth-cms-mcp/internal/version.Version=v1.0.0" .
+go build -ldflags "-X github.com/reearth/reearth-cms-mcp/internal/version.Version=v1.0.0" .
 ```
 
 ## How to Run

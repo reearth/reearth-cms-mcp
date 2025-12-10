@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/KeisukeYamashita/reearth-cms-mcp/internal/cms"
+	"github.com/reearth/reearth-cms-mcp/internal/cms"
 )
 
 type Config struct {

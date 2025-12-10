@@ -1,4 +1,4 @@
-module github.com/KeisukeYamashita/reearth-cms-mcp
+module github.com/reearth/reearth-cms-mcp
 
 go 1.25.5
 

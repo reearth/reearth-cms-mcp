@@ -5,9 +5,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/KeisukeYamashita/reearth-cms-mcp/internal/handler"
-	"github.com/KeisukeYamashita/reearth-cms-mcp/internal/version"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"github.com/reearth/reearth-cms-mcp/internal/handler"
+	"github.com/reearth/reearth-cms-mcp/internal/logging"
+	"github.com/reearth/reearth-cms-mcp/internal/version"
 )
 
 const defaultBaseURL = "https://api.cms.reearth.io/api"
@@ -238,7 +239,12 @@ func main() {
 		Description: "Update a project in Re:Earth CMS",
 	}, h.UpdateProject)
 
-	if err := server.Run(context.Background(), &mcp.StdioTransport{}); err != nil {
+	var transport mcp.Transport = &mcp.StdioTransport{}
+	if logging.IsDebugEnabled() {
+		transport = logging.NewLoggingTransport(transport, os.Stderr)
+	}
+
+	if err := server.Run(context.Background(), transport); err != nil {
 		log.Fatal(err)
 	}
 }
