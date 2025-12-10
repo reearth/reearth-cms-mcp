@@ -16,7 +16,10 @@ Here are some other useful prompts to get started:
 | Explore models | `What models are available in project XXX?` |
 | Export data | `Export all items from "buildings" model as GeoJSON` |
 | List all projects | `Show me all projects in my workspace` |
+| Publish asset | `Publish asset 123 in project abc` |
+| Publish item | `Publish item 456 in model "articles"` |
 | Search items | `Find all items in the "products" model that contain "Tokyo"` |
+| Unpublish asset | `Unpublish asset 789 in project abc` |
 | View schema | `Show me the schema for the "articles" model` |
 
 ## Features
@@ -59,7 +62,17 @@ This MCP server uses the Re:Earth CMS integration API, so you need the following
 <details>
 <summary>Claude Code</summary>
 
-#### Using Go binary
+<table>
+<tr><th>Docker (Recommended)</th><th>Go binary</th></tr>
+<tr valign=top>
+<td>
+
+```bash
+claude mcp add reearth-cms -e REEARTH_CMS_TOKEN=your-api-token -e REEARTH_CMS_WORKSPACE_ID=your-workspace-id -- docker run -i --rm -e REEARTH_CMS_TOKEN -e REEARTH_CMS_WORKSPACE_ID reearth/reearth-cms-mcp
+```
+
+</td>
+<td>
 
 ```bash
 claude mcp add reearth-cms -e REEARTH_CMS_TOKEN=your-api-token -e REEARTH_CMS_WORKSPACE_ID=your-workspace-id -- reearth-cms-mcp
@@ -73,11 +86,9 @@ export REEARTH_CMS_WORKSPACE_ID="your-workspace-id"
 claude mcp add reearth-cms -- reearth-cms-mcp
 ```
 
-#### Using Docker
-
-```bash
-claude mcp add reearth-cms -e REEARTH_CMS_TOKEN=your-api-token -e REEARTH_CMS_WORKSPACE_ID=your-workspace-id -- docker run -i --rm -e REEARTH_CMS_TOKEN -e REEARTH_CMS_WORKSPACE_ID reearth/reearth-cms-mcp
-```
+</td>
+</tr>
+</table>
 
 </details>
 
@@ -89,23 +100,10 @@ Add the following to your Claude Desktop config file:
 - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
-#### Using Go binary
-
-```json
-{
-  "mcpServers": {
-    "reearth-cms": {
-      "command": "reearth-cms-mcp",
-      "env": {
-        "REEARTH_CMS_TOKEN": "your-api-token",
-        "REEARTH_CMS_WORKSPACE_ID": "your-workspace-id"
-      }
-    }
-  }
-}
-```
-
-#### Using Docker
+<table>
+<tr><th>Docker (Recommended)</th><th>Go binary</th></tr>
+<tr valign=top>
+<td>
 
 ```json
 {
@@ -122,12 +120,54 @@ Add the following to your Claude Desktop config file:
 }
 ```
 
+</td>
+<td>
+
+```json
+{
+  "mcpServers": {
+    "reearth-cms": {
+      "command": "reearth-cms-mcp",
+      "env": {
+        "REEARTH_CMS_TOKEN": "your-api-token",
+        "REEARTH_CMS_WORKSPACE_ID": "your-workspace-id"
+      }
+    }
+  }
+}
+```
+
+</td>
+</tr>
+</table>
+
 </details>
 
 <details>
 <summary>Codex</summary>
 
-#### Using Go binary
+<table>
+<tr><th>Docker (Recommended)</th><th>Go binary</th></tr>
+<tr valign=top>
+<td>
+
+```json
+{
+  "mcpServers": {
+    "reearth-cms": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "-e", "REEARTH_CMS_TOKEN", "-e", "REEARTH_CMS_WORKSPACE_ID", "reearth/reearth-cms-mcp"],
+      "env": {
+        "REEARTH_CMS_TOKEN": "your-api-token",
+        "REEARTH_CMS_WORKSPACE_ID": "your-workspace-id"
+      }
+    }
+  }
+}
+```
+
+</td>
+<td>
 
 Add the following to your Codex MCP configuration:
 
@@ -145,7 +185,19 @@ Add the following to your Codex MCP configuration:
 }
 ```
 
-#### Using Docker
+</td>
+</tr>
+</table>
+
+</details>
+
+<details>
+<summary>Cursor</summary>
+
+<table>
+<tr><th>Docker (Recommended)</th><th>Go binary</th></tr>
+<tr valign=top>
+<td>
 
 ```json
 {
@@ -162,12 +214,8 @@ Add the following to your Codex MCP configuration:
 }
 ```
 
-</details>
-
-<details>
-<summary>Cursor</summary>
-
-#### Using Go binary
+</td>
+<td>
 
 Add the following to your Cursor MCP configuration (`~/.cursor/mcp.json`):
 
@@ -185,7 +233,28 @@ Add the following to your Cursor MCP configuration (`~/.cursor/mcp.json`):
 }
 ```
 
-#### Using Docker
+</td>
+</tr>
+</table>
+
+</details>
+
+<details>
+<summary>Raycast</summary>
+
+<table>
+<tr><th>Docker (Recommended)</th><th>Go binary</th></tr>
+<tr><th align=left colspan=2>Raycast</th></tr>
+<tr valign=top>
+<td>
+
+| Field | Value |
+|-------|-------|
+| Name | `reearth-cms` |
+| Command | `docker` |
+| Arguments | `run -i --rm -e REEARTH_CMS_TOKEN -e REEARTH_CMS_WORKSPACE_ID reearth/reearth-cms-mcp` |
+
+Or via config file (`~/.config/raycast/mcp.json`):
 
 ```json
 {
@@ -202,15 +271,11 @@ Add the following to your Cursor MCP configuration (`~/.cursor/mcp.json`):
 }
 ```
 
-</details>
+</td>
+<td>
 
-<details>
-<summary>Raycast</summary>
-
-#### Using Go binary
-
-1. Open Raycast Settings
-2. Go to **Extensions** > **AI Commands** > **MCP Servers**
+1. Open Raycast Settings  
+2. Go to **Extensions** > **AI Commands** > **MCP Servers**  
 3. Click **Add Server** and configure:
 
 | Field | Value |
@@ -241,57 +306,20 @@ Alternatively, you can add the server via Raycast's config file (`~/.config/rayc
 }
 ```
 
-#### Using Docker
-
-| Field | Value |
-|-------|-------|
-| Name | `reearth-cms` |
-| Command | `docker` |
-| Arguments | `run -i --rm -e REEARTH_CMS_TOKEN -e REEARTH_CMS_WORKSPACE_ID reearth/reearth-cms-mcp` |
-
-Or via config file (`~/.config/raycast/mcp.json`):
-
-```json
-{
-  "mcpServers": {
-    "reearth-cms": {
-      "command": "docker",
-      "args": ["run", "-i", "--rm", "-e", "REEARTH_CMS_TOKEN", "-e", "REEARTH_CMS_WORKSPACE_ID", "reearth/reearth-cms-mcp"],
-      "env": {
-        "REEARTH_CMS_TOKEN": "your-api-token",
-        "REEARTH_CMS_WORKSPACE_ID": "your-workspace-id"
-      }
-    }
-  }
-}
-```
+</td>
+</tr>
+</table>
 
 </details>
 
 <details>
 <summary>VS Code</summary>
 
-#### Using Go binary
-
-Add the following to your VS Code `settings.json`:
-
-```json
-{
-  "mcp": {
-    "servers": {
-      "reearth-cms": {
-        "command": "reearth-cms-mcp",
-        "env": {
-          "REEARTH_CMS_TOKEN": "your-api-token",
-          "REEARTH_CMS_WORKSPACE_ID": "your-workspace-id"
-        }
-      }
-    }
-  }
-}
-```
-
-#### Using Docker
+<table>
+<tr><th>Docker (Recommended)</th><th>Go binary</th></tr>
+<tr><th align=left colspan=2>VS Code (version 1.101 or greater)</th></tr>
+<tr valign=top>
+<td>
 
 ```json
 {
@@ -309,6 +337,29 @@ Add the following to your VS Code `settings.json`:
   }
 }
 ```
+
+</td>
+<td>
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "reearth-cms": {
+        "command": "reearth-cms-mcp",
+        "env": {
+          "REEARTH_CMS_TOKEN": "your-api-token",
+          "REEARTH_CMS_WORKSPACE_ID": "your-workspace-id"
+        }
+      }
+    }
+  }
+}
+```
+
+</td>
+</tr>
+</table>
 
 </details>
 
