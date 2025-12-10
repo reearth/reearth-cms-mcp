@@ -151,19 +151,14 @@ Add the following to your Claude Desktop config file:
 <tr valign=top>
 <td>
 
-```json
-{
-  "mcpServers": {
-    "reearth-cms": {
-      "command": "docker",
-      "args": ["run", "-i", "--rm", "-e", "REEARTH_CMS_TOKEN", "-e", "REEARTH_CMS_WORKSPACE_ID", "reearth/reearth-cms-mcp"],
-      "env": {
-        "REEARTH_CMS_TOKEN": "your-api-token",
-        "REEARTH_CMS_WORKSPACE_ID": "your-workspace-id"
-      }
-    }
-  }
-}
+```toml
+[mcp_servers.reearth-cms]
+args = ["run", "-i", "--rm", "reearth/reearth-cms-mcp"]
+command = "docker"
+
+[mcp_servers.reearth-cms.env]
+REEARTH_CMS_TOKEN = "you-api-token"
+REEARTH_CMS_WORKSPACE_ID = "your-workspace-id"
 ```
 
 </td>
@@ -171,18 +166,13 @@ Add the following to your Claude Desktop config file:
 
 Add the following to your Codex MCP configuration:
 
-```json
-{
-  "mcpServers": {
-    "reearth-cms": {
-      "command": "reearth-cms-mcp",
-      "env": {
-        "REEARTH_CMS_TOKEN": "your-api-token",
-        "REEARTH_CMS_WORKSPACE_ID": "your-workspace-id"
-      }
-    }
-  }
-}
+```toml
+[mcp_servers.reearth-cms]
+command = "reearth-cms-mcp"
+
+[mcp_servers.reearth-cms.env]
+REEARTH_CMS_TOKEN = "you-api-token"
+REEARTH_CMS_WORKSPACE_ID = "your-workspace-id"
 ```
 
 </td>
