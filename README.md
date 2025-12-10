@@ -138,6 +138,8 @@ Add the following to your Claude Desktop config file:
 <details>
 <summary>Codex</summary>
 
+Add the following to your Codex MCP configuration:
+
 <table>
 <tr><th>Docker (Recommended)</th><th>Go binary</th></tr>
 <tr valign=top>
@@ -156,8 +158,6 @@ REEARTH_CMS_WORKSPACE_ID = "your-workspace-id"
 </td>
 <td>
 
-Add the following to your Codex MCP configuration:
-
 ```toml
 [mcp_servers.reearth-cms]
 command = "reearth-cms-mcp"
@@ -175,6 +175,8 @@ REEARTH_CMS_WORKSPACE_ID = "your-workspace-id"
 
 <details>
 <summary>Cursor</summary>
+
+Add the following to your Cursor MCP configuration (`~/.cursor/mcp.json`):
 
 <table>
 <tr><th>Docker (Recommended)</th><th>Go binary</th></tr>
@@ -198,8 +200,6 @@ REEARTH_CMS_WORKSPACE_ID = "your-workspace-id"
 
 </td>
 <td>
-
-Add the following to your Cursor MCP configuration (`~/.cursor/mcp.json`):
 
 ```json
 {
