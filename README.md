@@ -45,7 +45,7 @@ docker pull reearth/reearth-cms-mcp
 ### Go
 
 ```bash
-go install github.com/reearth/reearth-cms-mcp@latest
+go install github.com/reearth/reearth-cms-mcp
 ```
 
 ## Configuration
@@ -63,7 +63,7 @@ This MCP server uses the Re:Earth CMS integration API, so you need the following
 <summary>Claude Code</summary>
 
 <table>
-<tr><th>Docker (Recommended)</th><th>Go binary</th></tr>
+<tr><th>Docker (Recommended)</th><th>Go</th></tr>
 <tr valign=top>
 <td>
 
@@ -93,7 +93,7 @@ Add the following to your Claude Desktop config file:
 - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
 <table>
-<tr><th>Docker (Recommended)</th><th>Go binary</th></tr>
+<tr><th>Docker (Recommended)</th><th>Go</th></tr>
 <tr valign=top>
 <td>
 
@@ -141,7 +141,7 @@ Add the following to your Claude Desktop config file:
 Add the following to your Codex MCP configuration:
 
 <table>
-<tr><th>Docker (Recommended)</th><th>Go binary</th></tr>
+<tr><th>Docker (Recommended)</th><th>Go</th></tr>
 <tr valign=top>
 <td>
 
@@ -179,7 +179,7 @@ REEARTH_CMS_WORKSPACE_ID = "your-workspace-id"
 Add the following to your Cursor MCP configuration (`~/.cursor/mcp.json`):
 
 <table>
-<tr><th>Docker (Recommended)</th><th>Go binary</th></tr>
+<tr><th>Docker (Recommended)</th><th>Go</th></tr>
 <tr valign=top>
 <td>
 
@@ -225,8 +225,7 @@ Add the following to your Cursor MCP configuration (`~/.cursor/mcp.json`):
 <summary>Raycast</summary>
 
 <table>
-<tr><th>Docker (Recommended)</th><th>Go binary</th></tr>
-<tr><th align=left colspan=2>Raycast</th></tr>
+<tr><th>Docker (Recommended)</th><th>Go</th></tr>
 <tr valign=top>
 <td>
 
@@ -309,7 +308,7 @@ Alternatively, you can add the server via Raycast's config file (`~/.config/rayc
 <summary>VS Code</summary>
 
 <table>
-<tr><th>Docker (Recommended)</th><th>Go binary</th></tr>
+<tr><th>Docker (Recommended)</th><th>Go</th></tr>
 <tr><th align=left colspan=2>VS Code (version 1.101 or greater)</th></tr>
 <tr valign=top>
 <td>
