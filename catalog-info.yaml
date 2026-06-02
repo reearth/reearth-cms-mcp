@@ -1,0 +1,25 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: reearth-cms-mcp
+  namespace: reearth
+  description: MCP server for Re:Earth CMS
+  annotations:
+    github.com/project-slug: reearth/reearth-cms-mcp
+  links:
+  - url: https://github.com/reearth/reearth-cms-mcp
+    title: GitHub
+    icon: github
+  - url: https://cms.reearth.io
+    title: Website
+    icon: web
+  tags:
+  - go
+  - cms
+  - golang
+  - mcp
+  - mcp-server
+spec:
+  type: service
+  lifecycle: production
+  owner: reearth/cms
