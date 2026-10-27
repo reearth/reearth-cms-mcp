@@ -16,7 +16,7 @@ A Model Context Protocol (MCP) server for Re:Earth CMS API, built with Go.
 
 ### Requirements
 
-- Go 1.25+
+- Go 1.27+
 
 ### Build
 
