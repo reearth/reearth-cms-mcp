@@ -1,6 +1,6 @@
 module github.com/reearth/reearth-cms-mcp
 
-go 1.25.5
+go 1.27.3
 
 require (
 	github.com/modelcontextprotocol/go-sdk v1.1.0
